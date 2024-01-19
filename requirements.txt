@@ -1,0 +1,3 @@
+scikit-learn
+fitz
+docx2txt
