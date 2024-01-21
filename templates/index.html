@@ -26,25 +26,13 @@
             margin-bottom: 10px;
         }
 
-        .loading {
+        select {
+            margin-bottom: 10px;
+        }
+
+        #customPrompt {
+            margin-bottom: 10px;
             display: none;
-        }
-
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .spinner {
-            border: 3px solid rgba(0, 0, 0, 0.1);
-            border-top: 3px solid #007bff;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-            margin-right: 5px;
-            display: inline-block;
-            vertical-align: text-bottom;
         }
     </style>
 </head>
@@ -53,7 +41,29 @@
         <h1 class="display-4">PDF Upload</h1>
         <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
             <input type="file" name="file" accept=".pdf" class="form-control">
-            <button type="submit" class="btn btn-primary">Upload <span class="spinner" id="loadingSpinner"></span></button>
+            
+            <!-- Dropdown for selecting category -->
+            <select name="category" id="category" class="form-control" onchange="showHideCustomPrompt()">
+                <option value="Content Understanding">Content Understanding</option>
+                <option value="Methodology and Experimentation">Methodology and Experimentation</option>
+                <option value="Results and Analysis">Results and Analysis</option>
+                <option value="Limitations and Challenges">Limitations and Challenges</option>
+                <option value="Comparisons and Contrasts">Comparisons and Contrasts</option>
+                <option value="Future Work and Implications">Future Work and Implications</option>
+                <option value="Technical Details">Technical Details</option>
+                <option value="Citations and References">Citations and References</option>
+                <option value="Interdisciplinary Aspects">Interdisciplinary Aspects</option>
+                <option value="Ethical Considerations">Ethical Considerations</option>
+                <option value="Review of Related Literature">Review of Related Literature</option>
+                <option value="Critical Analysis">Critical Analysis</option>
+                <option value="Own Prompt">Own Prompt</option>
+            </select>
+
+            <!-- Text area for custom prompt -->
+            <textarea id="customPrompt" name="customPrompt" class="form-control" placeholder="Enter your custom prompt"></textarea>
+
+            <!-- Button to dynamically change label based on user action -->
+            <button type="button" class="btn btn-primary" onclick="submitForm()">Enter</button>
         </form>
     </div>
 
@@ -63,11 +73,28 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script>
-        // Add loading spinner functionality
-        document.getElementById('uploadForm').addEventListener('submit', function () {
-            document.getElementById('loadingSpinner').classList.add('spinner-border', 'spinner-border-sm');
-            document.getElementById('loadingSpinner').style.display = 'inline-block';
-        });
+        // Function to show/hide custom prompt textarea
+        function showHideCustomPrompt() {
+            var categorySelect = document.getElementById('category');
+            var customPrompt = document.getElementById('customPrompt');
+            var submitButton = document.getElementById('submitButton');
+
+            if (categorySelect.value === 'Own Prompt') {
+                customPrompt.style.display = 'block';
+                submitButton.innerText = 'Upload';
+            } else {
+                customPrompt.style.display = 'none';
+                submitButton.innerText = 'Enter';
+            }
+        }
+
+        // Function to submit both custom prompt and file
+        function submitForm() {
+            var customPrompt = document.getElementById('customPrompt').value;
+            // Add logic to use the custom prompt and submit the form
+            alert('Custom Prompt: ' + customPrompt);
+            document.getElementById('uploadForm').submit();
+        }
     </script>
 </body>
 </html>
