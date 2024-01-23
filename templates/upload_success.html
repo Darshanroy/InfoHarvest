@@ -4,12 +4,26 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Add Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <title>Upload Success</title>
 </head>
-<body>
-    <h1>Upload Success</h1>
-    <p>File uploaded successfully. File path: {{ file_path }}</p>
-    {{ text }}
-
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="jumbotron">
+            <h1 class="display-4">Upload Success</h1>
+            <p class="lead">File uploaded successfully. File path: <strong>{{ file_path }}</strong></p>
+            <!-- Displaying text paragraph by paragraph using Bootstrap typography classes -->
+            <div class="mb-3">
+                {{ text|striptags|title }}
+            </div>
+            <!-- Home button inside the jumbotron -->
+            <a href="/" class="btn btn-secondary">Home</a>
+        </div>
+    </div>
+    <!-- Add Bootstrap JS and Popper.js -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
