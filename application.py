@@ -4,17 +4,25 @@ from src.components.text_extarct import ResumeTextExtractor
 from src.components.API_extractor import generate_content
 import os
 import google.generativeai as genai
+from docx import Document
 
 app = Flask(__name__)
-genai.configure(api_key="AIzaSyApKK5BXpv6x41yTXubZnkkKBnQq4NLEbM")
+genai.configure(api_key="API_KEY")
 
-user_name = "Darshan"
+user_name = "User 1"
 UPLOAD_FOLDER = f'uploads/{user_name}'
-ALLOWED_EXTENSIONS = {'pdf'}
+ALLOWED_EXTENSIONS = {'pdf', 'docx'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def read_docx(file_path):
+    doc = Document(file_path)
+    text = ""
+    for paragraph in doc.paragraphs:
+        text += paragraph.text + "\n"
+    return text
 
 @app.route('/')
 def index():
@@ -37,12 +45,19 @@ def upload_file():
 
         selected_category = request.form.get('category')  # Get the selected category from the form
 
-        # Create an instance of ResumeTextExtractor
-        resume_text_extractor = ResumeTextExtractor()
+        # Check the file extension and read text accordingly
+        if file.filename.lower().endswith('.pdf'):
+            # For PDF files, use ResumeTextExtractor to extract text
+            resume_text_extractor = ResumeTextExtractor()
+            preprocessed_text = resume_text_extractor.extract_text_from_resumes(folder_path=file_path)
+        elif file.filename.lower().endswith('.docx'):
+            # For DOCX files, use read_docx to extract text
+            preprocessed_text = read_docx(file_path)
+        else:
+            # Handle other file formats if needed
+            return render_template('upload_error.html', error="Unsupported file format")
 
-        # Extract text from resumes
-        preprocessed_text = resume_text_extractor.extract_text_from_resumes(folder_path=file_path)
-
+        # Rest of your code remains unchanged
         # Get the corresponding set of questions based on the selected category
         prompt_dict = {
             "Content Understanding": [
@@ -108,17 +123,20 @@ def upload_file():
 
         # Example usage:
         default_prompt = f"""
-        Extract key elements from the provided research paper text. The paper falls under the [{selected_category}] category, and I need information on the following sections:
+        Extract key elements from the provided research paper text. The content which falls under the [{selected_category}] category, and I need information on the following sections:
         - {'        - '.join(questions)}
 
         The paper text is as follows:
         "{preprocessed_text}"
 
-        Provide detailed information for each section, summarizing the content and key findings. If a section is not present in the paper, indicate that it is not applicable.
-        just give sample text without any symobles like "*" ,"#"
+        Provide detailed information for each section, in standarad formate, summarizing the content and key findings. If a section is not present in the paper, indicate that it is not applicable. 
         """
 
+        pretify_prompt = f""" clearly formate the data into text blocks formate with spaces """
+
         result = generate_content(default_prompt)
+
+        # result = generate_content(pretify_prompt)
 
         return render_template('upload_success.html', file_path=file_path, text=result)
 

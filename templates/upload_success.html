@@ -4,82 +4,26 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Add Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <title>Upload Success</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        body {
-            background-color: #f8f9fa;
-            padding: 20px;
-            font-family: 'Arial', sans-serif;
-            color: #333;
-        }
-
-        h1 {
-            margin-bottom: 20px;
-            color: #007bff;
-        }
-
-        .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .form-control {
-            margin-bottom: 15px;
-        }
-
-        #customPrompt {
-            padding: 10px;
-            border: 1px solid #ced4da;
-            border-radius: 4px;
-            width: 100%;
-        }
-    </style>
 </head>
-<body>
-    <div class="container">
-        <h1 class="display-4">Upload Success</h1>
-        <p>File uploaded successfully. File path: {{ file_path }}</p>
-
-        <form id="promptForm" action="/upload" method="post" enctype="multipart/form-data">
-            <select name="category" class="form-control" onchange="handleCategoryChange()">
-                <option value="Content Understanding">Content Understanding</option>
-                <option value="Methodology and Experimentation">Methodology and Experimentation</option>
-                <!-- Add other options based on your requirements -->
-
-                <!-- Add "Own Prompt" option -->
-                <option value="Own Prompt">Own Prompt</option>
-            </select>
-
-            <!-- Text input for custom prompt -->
-            <textarea id="customPrompt" name="customPrompt" class="form-control" placeholder="Enter your custom prompt"></textarea>
-
-            <!-- Your existing content -->
-            {{ text }}
-        </form>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="jumbotron">
+            <h1 class="display-4">Upload Success</h1>
+            <p class="lead">File uploaded successfully. File path: <strong>{{ file_path }}</strong></p>
+            <!-- Displaying text paragraph by paragraph using Bootstrap typography classes -->
+            <div class="mb-3">
+                {{ text|striptags|title }}
+            </div>
+            <!-- Home button inside the jumbotron -->
+            <a href="/" class="btn btn-secondary">Home</a>
+        </div>
     </div>
-
-    <!-- Bootstrap JS and Popper.js -->
+    <!-- Add Bootstrap JS and Popper.js -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-    <script>
-        // Function to handle category change
-        function handleCategoryChange() {
-            var categorySelect = document.getElementById('category');
-            var customPromptTextarea = document.getElementById('customPrompt');
-
-            // If "Own Prompt" is selected, show the text area
-            if (categorySelect.value === 'Own Prompt') {
-                customPromptTextarea.style.display = 'block';
-            } else {
-                // If any other option is selected, hide the text area
-                customPromptTextarea.style.display = 'none';
-            }
-        }
-    </script>
 </body>
 </html>

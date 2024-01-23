@@ -1,3 +1,4 @@
 scikit-learn
 fitz
 docx2txt
+python-docx
